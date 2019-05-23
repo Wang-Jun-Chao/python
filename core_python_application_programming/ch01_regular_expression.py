@@ -105,7 +105,6 @@ m = re.match('(\w\w\w)-(\d\d\d)', 'abc-123')
 print(m.group()) # 完整匹配
 print(m.group(1)) # 子组 1
 print(m.group(2)) # 子组 2
-print(m.group(2)) # 子组 2
 m = re.match('ab', 'ab') # 没有子组
 print(m.group()) # 完整匹配
 print(m.groups()) # 所有子组
