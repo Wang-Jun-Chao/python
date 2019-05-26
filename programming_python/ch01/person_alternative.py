@@ -1,60 +1,48 @@
 """
-实现一个图形界面，用千查看和更新存储千shelve中的类实例，
-该shelve保存在脚本运行的机器上，可能是一个或多个本地文件，
+person类的替代实现，包含数据．行为和运算符重载（未用千对象的持久存储）
 """
 
-from tkinter import *
-from tkinter.messagebox import showerror
-import shelve
 
-shelvename = 'class-shelve'
-fieldnames = ('name', 'age', 'job', 'pay')
+class Person:
+    """
+    一般person, 数据＋逻辑
+    """
 
+    def __init__(self, name, age, pay=0, job=None):
+        self.name = name
+        self.age = age
+        self.pay = pay
+        self.job = job
 
-def makeWidgets():
-    global entries
-    window = Tk()
-    window.title('People Shelve')
-    form = Frame(window)
-    form.pack()
-    entries = {}
-    for (ix, label) in enumerate(('key',) + fieldnames):
-        lab = Label(form, text=label)
-        ent = Entry(form)
-        lab.grid(row=ix, column=0)
-        ent.grid(row=ix, column=1)
-        entries[label] = ent
-    Button(window, text="Fetch", command=fetchRecord).pack(side=LEFT)
-    Button(window, text="Update", command=updateRecord).pack(side=LEFT)
-    Button(window, text="Quit", command=window.quit).pack(side=RIGHT)
-    return window
+    def lastName(self):
+        return self.name.split()[-1]
+
+    def giveRaise(self, percent):
+        self.pay *= (1.0 + percent)
+
+    def __str__(self):
+        return ('<%s => %s: %s, %s>' %
+                (self.__class__.__name__, self.name, self.job, self.pay))
 
 
-def fetchRecord():
-    key = entries['key'].get()
-    try:
-        record = db[key]  # 使用建获取数据，井在GUI 中展示
-    except:
-        showerror(title='Error', message='No such key I')
-    else:
-        for field in fieldnames:
-            entries[field].delete(0, END)
-            entries[field].insert(0, repr(getattr(record, field)))
+class Manager(Person):
+    """
+    带有自定义加薪的person
+    继承了通用的 lastname, str
+    """
+
+    def _init_(self, name, age, pay):
+        Person.__init__(self, name, age, pay, 'manager')
+
+    def giveRaise(self, percent, bonus=0.1):
+        Person.giveRaise(self, percent + bonus)
 
 
-def updateRecord():
-    key = entries['key'].get()
-    if key in db:
-        record = db[key]  # 更新已有记录
-    else:
-        from programming_python.ch01.person import Person  # 在该键值下生成／保存新记录
-        record = Person(name='?', age='?')  # eval, 字符串必须用引号引起来
-    for field in fieldnames:
-        setattr(record, field, eval(entries[field].get()))
-    db[key] = record
-
-
-db = shelve.open(shelvename)
-window = makeWidgets()
-window.mainloop()
-db.close()  # 程序退出或窗口关闭时， 程序执行将返回到这里
+if __name__ == '__main__':
+    bob = Person('Bob Smith', 44)
+    sue = Person('Sue Jones', 47, 40000, 'hardware')
+    tom = Manager(name='Tom Doe', age=50, pay=50000)
+    print(sue, sue.pay, sue.lastName())
+    for obj in (bob, sue, tom):
+        obj.giveRaise(.10)  # 调用该对象的giveRaise方法
+        print(obj)  # 调用通常的_str_方法
