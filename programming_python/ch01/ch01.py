@@ -236,7 +236,8 @@ tom = Manager('Tom Jones', 50)
 print(tom)  # prints: <Manager => Tom Jones>
 
 from urllib.request import urlopen
-conn= urlopen('http://localhost/cgi-bin/cgi101.py?user=Sue+Smith')
+
+conn = urlopen('http://localhost/cgi-bin/cgi101.py?user=Sue+Smith')
 reply = conn.read()
 result = reply
 print(result)
@@ -246,21 +247,31 @@ print(result)
 result = urlopen('http://localhost/cgi-bin/cgi101.py?user=Bob').read()
 print(result)
 
-D = {'say': 5, 'get':'shrubbery'}
+D = {'say': 5, 'get': 'shrubbery'}
 print(D['say'])
 
-S = '%(say)s => %(get)s'% D
+S = '%(say)s => %(get)s' % D
 print(S)
 
-D = {'say': 5, 'get':'shrubbery'}
-result = '%(say)s => %(get)s'% D
+D = {'say': 5, 'get': 'shrubbery'}
+result = '%(say)s => %(get)s' % D
 print(result)
 
 from programming_python.ch01.person import Person
+
 bob = Person('Bob', 35)
 
 result = '%(name)s, %(age)s' % bob.__dict__
 print(result)
 
 result = '{0.name} => {0.age}'.format(bob)
+print(result)
+
+from urllib.request import urlopen
+
+url = 'http://localhost/cgi-bin/peoplecgi.py?action=Fetch&key=sue'
+result = urlopen(url).read()
+print(result)
+
+result = urlopen('http://localhost/cgi-bin/peoplecgi.py').read()
 print(result)

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 """
 实现用来查看和更新保存在shelve 中类实例的基千Web的界面，
 shelve保存在服务器上（如果是本地机器的话，就是同一个机器）
@@ -17,20 +20,31 @@ replyhtml = """
 <html>
 <title>People Input Form</title>
 <body>
-<form method=POST action="peoplecgi.py">
+<form method="POST" action="peoplecgi.py">
     <table>
-    <tr><th>key<td><input type=text name=key value="%(key)s">
-    $ROWS$
+        <tr>
+            <th>key</th>
+            <td><input type="text" name="key" value="%(key)s"></td>
+        </tr>
+        $ROWS$
     </table>
     <p>
-    <input type=submit value="Fetch",  name=action>
-    <input type=submit value="Update", name=action>
+        <input type="submit" value="Fetch" name="action">
+        <input type="submit" value="Update" name="action">
+    </p>
 </form>
-</body></html>
+</body>
+</html>
 """
 
 # 为$ROWS$的数据行插入html
-rowhtml = '<tr><th>%s<td><input type=text name=%s value="%%(%s)s">\n'
+rowhtml = """
+<tr>
+    <th>%s</th>
+    <td><input type="text" name="%s"value="%%(%s)s"></td>
+</tr>
+\n
+"""
 rowshtml = ''
 for fieldname in fieldnames:
     rowshtml += (rowhtml % ((fieldname,) * 3))
@@ -78,6 +92,7 @@ def updateRecord(db, form):
 
 db = shelve.open(shelvename)
 action = form['action'].value if 'action' in form else None
+print("action -> " + action)
 if action == 'Fetch':
     fields = fetchRecord(db, form)
 elif action == 'Update':
@@ -87,3 +102,4 @@ else:
     fields['key'] = 'Missing or invalid action!'
 db.close()
 print(replyhtml % htmlize(fields))  # 使用dict来填充响应
+
