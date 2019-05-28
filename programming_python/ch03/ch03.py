@@ -22,3 +22,7 @@ for f in (sys.stdin, sys.stdout, sys.stderr) : print(f)
 # input('hello stdout world>')
 
 # print('hello stdout world>');sys.stdin.readline()[:-1]
+
+from programming_python.ch03.streams.moreplus import more
+
+more(open('/Users/wangjunchao/Project/python/programming_python/ch03/streams/adderSmall.py').read())
