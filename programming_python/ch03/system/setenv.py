@@ -11,3 +11,4 @@ os.system('python echoenv.py')  # and linked-in C library modules
 
 os.environ['USER'] = input('?')
 print(os.popen('python echoenv.py').read())
+
